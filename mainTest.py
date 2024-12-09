@@ -8,6 +8,8 @@ from tests.test_tag_sequence import check_html_tag_sequence
 from tests.test_image_alt import check_image_alt_attributes
 from tests.test_URL_status import check_url_status
 from utils.excel_formatter import apply_excel_formatting
+from tests.test_data_scrape import scrape_script_data_from_console
+
 
 def main():
     # Set up the WebDriver
@@ -20,10 +22,11 @@ def main():
         print(f"Internal Links: {len(internal_links)}")
         print(f"External Links: {len(external_links)}")
 
-        # Initialize test results
+        # Initialize test results and script data results
         results = []
+        script_data_results = []
 
-        # Test internal links for H1, HTML tag sequence, and image alt attributes
+        # Test internal links for H1, HTML tag sequence, image alt attributes, and scrape script data
         for link in internal_links:
             print(f"Testing internal link: {link}")
 
@@ -39,6 +42,10 @@ def main():
             image_alt_result = check_image_alt_attributes(driver, link)
             results.append(image_alt_result)
 
+            # Scrape ScriptData from console
+            script_data = scrape_script_data_from_console(driver, link)
+            script_data_results.append(script_data)
+
             time.sleep(1)  # Optional delay to avoid overwhelming the server
 
         # Test all links (internal and external) for URL status code
@@ -50,8 +57,14 @@ def main():
 
         # Save results to an Excel file
         df = pd.DataFrame(results)
+        script_df = pd.DataFrame(script_data_results)
         excel_file = OUTPUT_FILE.replace(".csv", ".xlsx")
-        df.to_excel(excel_file, index=False)
+
+        # Save both sheets
+        with pd.ExcelWriter(excel_file, engine="openpyxl") as writer:
+            df.to_excel(writer, index=False, sheet_name="Test Results")
+            script_df.to_excel(writer, index=False, sheet_name="Script Data")
+        
         print(f"Test completed. Results saved to '{excel_file}'.")
 
         # Beautify the Excel file
@@ -60,6 +73,7 @@ def main():
 
     finally:
         driver.quit()
+
 
 if __name__ == "__main__":
     main()
