@@ -8,7 +8,7 @@ from tests.test_tag_sequence import check_html_tag_sequence
 from tests.test_image_alt import check_image_alt_attributes
 from tests.test_URL_status import check_url_status
 from utils.excel_formatter import apply_excel_formatting
-from tests.test_data_scrape import scrape_script_data_from_console
+from tests.test_data_scrape import scrape_script_data_once
 
 
 def main():
@@ -22,9 +22,12 @@ def main():
         print(f"Internal Links: {len(internal_links)}")
         print(f"External Links: {len(external_links)}")
 
+
+        print("Scraping script data...")
+        script_data_result = [scrape_script_data_once(driver, BASE_URL)]
         # Initialize test results and script data results
         results = []
-        script_data_results = []
+        
 
         # Test internal links for H1, HTML tag sequence, image alt attributes, and scrape script data
         for link in internal_links:
@@ -42,9 +45,6 @@ def main():
             image_alt_result = check_image_alt_attributes(driver, link)
             results.append(image_alt_result)
 
-            # Scrape ScriptData from console
-            script_data = scrape_script_data_from_console(driver, link)
-            script_data_results.append(script_data)
 
             time.sleep(1)  # Optional delay to avoid overwhelming the server
 
@@ -57,7 +57,7 @@ def main():
 
         # Save results to an Excel file
         df = pd.DataFrame(results)
-        script_df = pd.DataFrame(script_data_results)
+        script_df = pd.DataFrame(script_data_result)
         excel_file = OUTPUT_FILE.replace(".csv", ".xlsx")
 
         # Save both sheets

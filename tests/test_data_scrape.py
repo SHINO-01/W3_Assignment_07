@@ -1,16 +1,16 @@
-def scrape_script_data_from_console(driver, url):
+def scrape_script_data_once(driver, base_url):
     """
-    Extracts ScriptData from the browser console on the given page.
+    Extracts ScriptData from the browser console on the base page.
 
     Parameters:
         driver: Selenium WebDriver instance.
-        url: The URL of the page to scrape.
+        base_url: The base URL of the site to scrape.
 
     Returns:
         A dictionary with extracted data or default placeholders if ScriptData is not found.
     """
     try:
-        driver.get(url)
+        driver.get(base_url)
 
         # Execute JavaScript to fetch the ScriptData object
         script_data = driver.execute_script(
@@ -24,12 +24,12 @@ def scrape_script_data_from_console(driver, url):
                 "CampaignID": script_data.get("pageData", {}).get("CampaignId", "N/A"),
                 "SiteName": script_data.get("config", {}).get("SiteName", "N/A"),
                 "Browser": script_data.get("userInfo", {}).get("Browser", "N/A"),
-                "CountryCode": script_data.get("pageData", {}).get("CountryCode", "N/A"),
+                "CountryCode": script_data.get("userInfo", {}).get("CountryCode", "N/A"),
                 "IP": script_data.get("userInfo", {}).get("IP", "N/A"),
             }
         else:
             return {
-                "SiteURL": url,
+                "SiteURL": base_url,
                 "CampaignID": "N/A",
                 "SiteName": "N/A",
                 "Browser": "N/A",
@@ -40,7 +40,7 @@ def scrape_script_data_from_console(driver, url):
 
     except Exception as e:
         return {
-            "SiteURL": url,
+            "SiteURL": base_url,
             "CampaignID": "Error",
             "SiteName": "Error",
             "Browser": "Error",
