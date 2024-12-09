@@ -71,7 +71,7 @@ def extract_links(driver, url, base_url):
 
                 # Skip links that should be ignored
                 if should_ignore_link(absolute_url):
-                    print(f"Ignored link: {absolute_url}")
+                    #print(f"Ignored link: {absolute_url}")
                     continue
 
                 if is_internal_link(base_url, absolute_url):

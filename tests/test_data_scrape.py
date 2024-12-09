@@ -20,11 +20,11 @@ def scrape_script_data_from_console(driver, url):
         # Check if ScriptData was found
         if script_data:
             return {
-                "SiteURL": url,
-                "CampaignID": script_data.get("config", {}).get("CampaignID", "N/A"),
+                "SiteURL": script_data.get("config", {}).get("SiteUrl", "N/A"),
+                "CampaignID": script_data.get("pageData", {}).get("CampaignId", "N/A"),
                 "SiteName": script_data.get("config", {}).get("SiteName", "N/A"),
-                "Browser": script_data.get("userInfo", {}).get("Platform", "N/A"),
-                "CountryCode": script_data.get("userCurrency", {}).get("Country", "N/A"),
+                "Browser": script_data.get("userInfo", {}).get("Browser", "N/A"),
+                "CountryCode": script_data.get("pageData", {}).get("CountryCode", "N/A"),
                 "IP": script_data.get("userInfo", {}).get("IP", "N/A"),
             }
         else:
