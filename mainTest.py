@@ -9,6 +9,7 @@ from tests.test_tag_sequence import check_html_tag_sequence
 from tests.test_image_alt import check_image_alt_attributes
 from tests.test_URL_status import check_url_status
 from tests.test_data_scrape import scrape_script_data_once
+from tests.test_currency_change import test_currency_filtering
 
 
 def main():
@@ -32,7 +33,7 @@ def main():
         image_alt_results = []
         url_status_results = []
 
-        # Test internal links for H1, HTML tag sequence, and image alt attributes
+        # Test internal links for H1, HTML tag sequence, image alt attributes, and URL status
         for link in internal_links:
             print(f"Testing internal link: {link}")
 
@@ -48,14 +49,21 @@ def main():
             image_alt_result = check_image_alt_attributes(driver, link)
             image_alt_results.append(image_alt_result)
 
-            time.sleep(1)  # Optional delay to avoid overwhelming the server
-
-        # Test all links (internal and external) for URL status code
-        all_links = internal_links.union(external_links)
-        for link in all_links:
-            print(f"Testing URL status: {link}")
+            # Test URL status for the same internal link
             url_status_result = check_url_status(link)
             url_status_results.append(url_status_result)
+
+            time.sleep(1)  # Optional delay to avoid overwhelming the server
+
+        # Test external links for URL status only
+        for link in external_links:
+            print(f"Testing external link URL status: {link}")
+            url_status_result = check_url_status(link)
+            url_status_results.append(url_status_result)
+
+        # Perform currency filtering test once
+        print("Testing currency filtering...")
+        currency_results = test_currency_filtering(driver, BASE_URL)
 
         # Save results to an Excel file
         h1_df = pd.DataFrame(h1_results)
@@ -63,6 +71,7 @@ def main():
         image_alt_df = pd.DataFrame(image_alt_results)
         url_status_df = pd.DataFrame(url_status_results)
         script_df = pd.DataFrame(script_data_result)
+        currency_df = pd.DataFrame(currency_results)
 
         excel_file = OUTPUT_FILE.replace(".csv", ".xlsx")
 
@@ -73,6 +82,7 @@ def main():
             image_alt_df.to_excel(writer, index=False, sheet_name="Image Alt Test")
             url_status_df.to_excel(writer, index=False, sheet_name="URL Status")
             script_df.to_excel(writer, index=False, sheet_name="Script Data")
+            currency_df.to_excel(writer, index=False, sheet_name="Currency Filtering")
 
         print(f"Test completed. Results saved to '{excel_file}'.")
 
