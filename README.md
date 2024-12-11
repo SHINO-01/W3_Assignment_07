@@ -59,6 +59,7 @@
         <li>Run the main test file:</li>
         <pre>python3 mainTest.py</pre> or use python for windows
         <li>The test results will be saved in the <code>reports</code> directory as an Excel file.</li>
+        <li>If you want to change the target URL for testing, you can find the variable <code>BASE_URL</code> in the config/settings.py</li>
     </ol>
     <h2 id="sample-output">6. Sample Output</h2>
     <p>The test suite generates an Excel file with the following sheets:</p>
