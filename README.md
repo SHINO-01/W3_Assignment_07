@@ -44,11 +44,10 @@
         <li>Create a virtual environment:</li>
         <pre>python -m venv .venv</pre>
         <li>Activate the virtual environment:</li>
-        <pre>
-        # Windows
-        .venv\Scripts\activate
-        # macOS/Linux
-        source .venv/bin/activate
+        <pre># Windows
+            .venv\Scripts\activate
+            # macOS/Linux
+            source .venv/bin/activate
         </pre>
         <li>Install dependencies:</li>
         <pre>pip3 install -r requirements.txt</pre> or use pip for windows
