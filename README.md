@@ -44,7 +44,8 @@
         <li>Create a virtual environment:</li>
         <pre>python -m venv .venv</pre>
         <li>Activate the virtual environment:</li>
-        <pre># Windows
+        <pre>
+            # Windows
             .venv\Scripts\activate
             # macOS/Linux
             source .venv/bin/activate
