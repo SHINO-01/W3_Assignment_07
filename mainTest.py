@@ -1,3 +1,4 @@
+import os
 import time
 import pandas as pd
 from config.settings import BASE_URL, OUTPUT_FILE
@@ -11,8 +12,20 @@ from tests.test_URL_status import check_url_status
 from tests.test_data_scrape import scrape_script_data_once
 from tests.test_currency_change import test_currency_filtering
 
+def ensure_directory_exists(file_path):
+    """
+    Ensures the directory for the given file path exists.
+    Creates it if it does not exist.
+    """
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"Created directory: {directory}")
 
 def main():
+
+    ensure_directory_exists(OUTPUT_FILE)
+
     # Set up the WebDriver
     driver = get_driver()
 
